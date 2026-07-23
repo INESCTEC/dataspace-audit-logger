@@ -1,0 +1,50 @@
+Release: 1.1.4
+ -fixed ProvidedEdiArtifact: rejectedReason had length of 255 now it has 1024
+
+Release: 1.1.3
+  -EdiArtifactsLogController: another two new controller methods (GET)
+  -EdiArtifactsLogController: another two new controller methods (DELETE)
+  -Added the possibility to have additional Users defined in the application properties. Example:
+    Broker.user1.name=root
+    Broker.user1.password=pass
+    ## possible values: read,write
+    Broker.user1.authorities=read,write
+   -We can have user2, user3, etc
+   -Updated the SecurityConfig because of that, now users can have a set of authorities 
+    ("read" for most cases, "write" for the DELETE controller of the EdiArtifactsLogController)  
+
+Release: 1.1.2
+  -added SecurityConfig.java
+  -Implementing the Edi Artifacts Log
+    --java code taken from the app4edi application
+    --added postgresql/spring-boot-starter-data-jpa/spring-boot-starter-validation to pom.xml
+    --added spring.datasource & spring.jpa properties to the application.properties file
+
+ -upgrade and set version 1.1.1:
+   -java 17 to java 21
+   -maven.minimum.version 3.3.9   to 3.6.3
+   -spring-boot           2.7.14  to 2.7.18
+   -lombok                1.18.24 to 1.18.32
+   -assertj               3.24.2  to 3.26.0
+   -postgres              42.5.1  to 42.7.3
+   -h2                    2.2.220 to 2.2.224
+   -maven plugins  ...
+   -mvn wrapper to 3.9.8
+ -new scripts to handle maven
+ -created new scripts to build docker image:
+   -followed the same app4edi's strategy
+   -one script to create a SNAPSHOT image, example: 1.1.SNAPSHOT
+   -another script to create a versioned image, example:  1.1 + 1.1.1
+
+Release: 1.0.1
+ - Allow registering the data logging
+ - Remove the https://maven.iais.fraunhofer.de/artifactory/eis-ids-public repository
+
+Release: 1.0.1
+ - Add a different model to the Process collection
+ - Remove the process from the output of the Query endpoint
+ - Add index on 'agreementID'
+ - Replace IDSA Maven project with INESCTEC Maven project
+
+Release: 1.0.0
+ - CH is its first release

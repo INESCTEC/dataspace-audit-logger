@@ -1,0 +1,66 @@
+services:
+    clearing-house-mongodb:
+        container_name: clearing-house-mongodb
+        image: mongo:7.0.7
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cese
+            MONGO_INITDB_ROOT_PASSWORD: password
+        ports:
+        - "27019:27017"
+        volumes:
+            - clearing-house-mongodb:/data/db
+        networks:
+            - clearing-house
+
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+            - 8089:8081
+        environment:
+            ME_CONFIG_BASICAUTH_USERNAME: cese
+            ME_CONFIG_BASICAUTH_PASSWORD: password
+            ME_CONFIG_MONGODB_URL: mongodb://cese:password@clearing-house-mongodb:27017/
+        depends_on:
+            - clearing-house-mongodb
+        networks:
+            - clearing-house
+
+
+    clearing-house-mongodb-texpact:
+        container_name: clearing-house-mongodb-texpact
+        image: mongo:7.0.7
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: cese
+            MONGO_INITDB_ROOT_PASSWORD: password
+        ports:
+            - "27018:27017"
+        volumes:
+            - clearing-house-mongodb-texpact:/data/db
+        networks:
+            - clearing-house
+
+    mongo-express-texpact:
+        image: mongo-express
+        restart: always
+        ports:
+            - 8088:8081
+        environment:
+            ME_CONFIG_BASICAUTH_USERNAME: cese
+            ME_CONFIG_BASICAUTH_PASSWORD: password
+            ME_CONFIG_MONGODB_URL: mongodb://cese:password@clearing-house-mongodb-texpact:27017/
+        depends_on:
+            - clearing-house-mongodb-texpact
+        networks:
+            - clearing-house
+
+networks:
+    clearing-house:
+        driver: bridge
+        
+volumes:
+    clearing-house-mongodb:
+    clearing-house-mongodb-texpact:
+
