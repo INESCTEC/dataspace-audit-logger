@@ -18,7 +18,7 @@ The service:
 - Tracks provided and consumed EDI artifacts and their lifecycle states.
 
 The project is maintained by INESC TEC and licensed under Apache License 2.0.
-The current application version is defined in `pom.xml` (1.1.4 at the time this
+The current application version is defined in `pom.xml` (1.1.5 at the time this
 file was written).
 
 ## Technology stack

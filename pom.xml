@@ -53,7 +53,7 @@
 
 	<properties>
 		<!-- General -->
-		<revision>1.1.4</revision>
+		<revision>1.1.5</revision>
 
 		<!-- Build info -->
 		<java.version>21</java.version>
