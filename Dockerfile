@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk-jammy
 # Hotspot based on ubuntu 22.04 LTS (jammy)
 
 VOLUME /tmp
-COPY ./target/clearinghouse-*.jar app.jar
+COPY ./target/dataspace-audit-logger-*.jar app.jar
 
 CMD ["java", "-jar", "/app.jar"]
 
