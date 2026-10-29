@@ -41,16 +41,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import pt.inesctec.ids.clearinghouse.app4edi.domain.ConsumedEdiArtifact;
 import pt.inesctec.ids.clearinghouse.app4edi.domain.ProvidedEdiArtifact;
 import pt.inesctec.ids.clearinghouse.app4edi.service.DataConverter;
 import pt.inesctec.ids.clearinghouse.app4edi.service.EdiArtifactConsumerService;
 import pt.inesctec.ids.clearinghouse.app4edi.service.EdiArtifactProviderService;
+import pt.inesctec.ids.clearinghouse.app4edi.util.ExceptionUtil;
 
 /* API :
  *   POST   /api/provided-edi-artifacts/update
@@ -67,6 +70,7 @@ import pt.inesctec.ids.clearinghouse.app4edi.service.EdiArtifactProviderService;
 //@RestController == @Controller + @ResponseBody
 @RestController // marks the class as a controller where every method returns a domain object instead of a view
 @RequestMapping("/api")
+@Slf4j
 public class EdiArtifactsLogController {
 
   private final ResponseEntities responseEntities;
@@ -99,6 +103,7 @@ public class EdiArtifactsLogController {
   public ResponseEntity<?> updateProvidedEdiArtifact(InputStream inputStream, final HttpServletRequest request) {
     try {
       JsonNode json = dataConverter.inputStream2Json(inputStream);
+      removeNonSupportedFieldsOnProvidedEdiArtifact(json);
       ProvidedEdiArtifact providedEdiArtifact = dataConverter.json2Object(ProvidedEdiArtifact.class, json);
 
       ediArtifactProviderService.update(providedEdiArtifact);
@@ -106,7 +111,28 @@ public class EdiArtifactsLogController {
       return responseEntities.withStatus(HttpStatus.CREATED);
     }
     catch (Throwable e) {
+      log.warn("updateProvidedEdiArtifact {} ", ExceptionUtil.getFullStackTrace(e));
       return responseEntities.withException(e, request.getMethod() + " " + request.getServletPath());
+    }
+  }
+
+  private void removeNonSupportedFieldsOnProvidedEdiArtifact(JsonNode json) {
+    // App4Edi (edc version) sends this field
+    if (json.has("docContentType")) {
+      ObjectNode object = (ObjectNode) json;
+      object.remove("docContentType");
+    }
+  }
+
+  private void removeNonSupportedFieldsOnConsumedEdiArtifact(JsonNode json) {
+    // App4Edi (edc version) sends this field
+    if (json.has("docContentType")) {
+      ObjectNode object = (ObjectNode) json;
+      object.remove("docContentType");
+    }
+    if (json.has("createdTime")) {
+      ObjectNode object = (ObjectNode) json;
+      object.remove("createdTime");
     }
   }
 
@@ -125,6 +151,7 @@ public class EdiArtifactsLogController {
   public ResponseEntity<?> updateConsumedEdiArtifact(InputStream inputStream, final HttpServletRequest request) {
     try {
       JsonNode json = dataConverter.inputStream2Json(inputStream);
+      removeNonSupportedFieldsOnConsumedEdiArtifact(json);
       ConsumedEdiArtifact consumedEdiArtifact = dataConverter.json2Object(ConsumedEdiArtifact.class, json);
 
       ediArtifactConsumerService.update(consumedEdiArtifact);
@@ -132,6 +159,7 @@ public class EdiArtifactsLogController {
       return responseEntities.withStatus(HttpStatus.CREATED);
     }
     catch (Throwable e) {
+      log.warn("updateConsumedEdiArtifact {} ", ExceptionUtil.getFullStackTrace(e));
       return responseEntities.withException(e, request.getMethod() + " " + request.getServletPath());
     }
   }
