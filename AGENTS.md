@@ -135,7 +135,7 @@ services. It also exposes mongo-express for development inspection.
 PostgreSQL stores provided and consumed EDI artifact records. The default
 configuration expects:
 
-- URL: `jdbc:postgresql://localhost:5432/ch-app4edi`
+- URL: `jdbc:postgresql://localhost:5432/ch_app4edi`
 - User: `postgres`
 
 PostgreSQL is not included in the MongoDB Compose file and must be provided
