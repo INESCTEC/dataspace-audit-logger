@@ -45,7 +45,6 @@ import pt.inesctec.ids.clearinghouse.model.Processes;
 import pt.inesctec.ids.clearinghouse.service.MongoService;
 import pt.inesctec.ids.clearinghouse.util.MessageUtil;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -56,7 +55,7 @@ import static pt.inesctec.ids.clearinghouse.constant.DatabaseConstant.PROCESS;
 import static pt.inesctec.ids.clearinghouse.constant.IDSConstant.HEADER;
 import static pt.inesctec.ids.clearinghouse.constant.IDSConstant.PAYLOAD;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LoggingControllerTest {
 

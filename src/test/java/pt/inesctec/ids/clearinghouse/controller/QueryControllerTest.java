@@ -62,7 +62,7 @@ import static pt.inesctec.ids.clearinghouse.constant.IDSConstant.PAYLOAD;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class QueryControllerTest {
 
