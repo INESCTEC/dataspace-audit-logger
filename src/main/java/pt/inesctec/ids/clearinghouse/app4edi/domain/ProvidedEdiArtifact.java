@@ -21,7 +21,7 @@
  * 4200-465 Porto
  * Portugal 
  */
-/* Copyright (C) [2021-2023], INESC TEC
+/* Copyright (C) [2021-2026], INESC TEC
  *
  * DataSpaceApp4EDI: Implements data exchange between different organizations in 
  * accordance with the International Data Space Reference Architecture

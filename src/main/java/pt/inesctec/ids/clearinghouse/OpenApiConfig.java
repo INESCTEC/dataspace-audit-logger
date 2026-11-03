@@ -61,7 +61,7 @@ public class OpenApiConfig {
                         .version(version)
                         .termsOfService(servletContext.getContextPath() + "/LICENSE.txt")
                         .license(new License()
-                          .name("Copyright © INESC TEC http://www.inesctec.pt 2023. All Rights Reserved.")
+                          .name("Copyright © INESC TEC http://www.inesctec.pt 2023-2026. All Rights Reserved.")
                           .url(servletContext.getContextPath() + "/LICENSE.txt"))
                         .contact(new Contact()
                           .name("Ana Chaves")
