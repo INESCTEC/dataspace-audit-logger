@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -49,7 +50,7 @@ import pt.inesctec.ids.clearinghouse.app4edi.service.DataConverter;
 import pt.inesctec.ids.clearinghouse.app4edi.util.Util;
 
 @IntegrationTests
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class EdiArtifactProviderControllerTests {
 
@@ -64,12 +65,18 @@ public class EdiArtifactProviderControllerTests {
   private String userName;
   @Value("${spring.security.user.password:}")
   private String userPassword;
-
+  
+  @LocalServerPort
+  private String serverPort;
+  private String serverBaseUrl;
+  
   @BeforeEach
   public void setUp() throws Exception {
     assertThat(context).isNotNull();
 
     database.deleteAllEntities();
+    
+    serverBaseUrl = String.format("http://localhost:%s", serverPort); 
   }
 
   /*
@@ -118,7 +125,7 @@ public class EdiArtifactProviderControllerTests {
 
   private void postProvidedEdiArtifactOnServer(String ediArtifactJsonString) throws Exception {
     // Post Create ProvidedEdiArtifact into the server
-    String url = UriComponentsBuilder.fromUriString("http://localhost:8083/api/provided-edi-artifacts/update").build().toString();
+    String url = UriComponentsBuilder.fromUriString(serverBaseUrl).path("api/provided-edi-artifacts/update").build().toString();
     AppApiAccessByOkhttp api = context.getBean(AppApiAccessByOkhttp.class);
     api.setUsername(userName);
     api.setPassword(userPassword);
@@ -133,7 +140,7 @@ public class EdiArtifactProviderControllerTests {
 
   private List<ProvidedEdiArtifact> getProvidedEdiArtifactsFromServer() throws Exception {
     // GET ProvidedEdiArtifact from the server
-    String url = UriComponentsBuilder.fromUriString("http://localhost:8083/api/provided-edi-artifacts/all").build().toString();
+    String url = UriComponentsBuilder.fromUriString(serverBaseUrl).path("api/provided-edi-artifacts/all").build().toString();
     AppApiAccessByOkhttp api = context.getBean(AppApiAccessByOkhttp.class);
     api.setUsername(userName);
     api.setPassword(userPassword);
@@ -147,7 +154,7 @@ public class EdiArtifactProviderControllerTests {
 
   private List<ProvidedEdiArtifact> getProvidedEdiArtifactsByParticipantFromServer(String participantId) throws Exception {
     // GET ProvidedEdiArtifact from the server
-    String url = UriComponentsBuilder.fromUriString("http://localhost:8083/api/provided-edi-artifacts/from-participant").pathSegment(participantId).build().toString();
+    String url = UriComponentsBuilder.fromUriString(serverBaseUrl).path("api/provided-edi-artifacts/from-participant").pathSegment(participantId).build().toString();
     AppApiAccessByOkhttp api = context.getBean(AppApiAccessByOkhttp.class);
     api.setUsername(userName);
     api.setPassword(userPassword);
@@ -199,7 +206,7 @@ public class EdiArtifactProviderControllerTests {
 
   private void postConsumedEdiArtifactOnServer(String ediArtifactJsonString) throws Exception {
     // Post Create ConsumedEdiArtifact into the server
-    String url = UriComponentsBuilder.fromUriString("http://localhost:8083/api/consumed-edi-artifacts/update").build().toString();
+    String url = UriComponentsBuilder.fromUriString(serverBaseUrl).path("api/consumed-edi-artifacts/update").build().toString();
     AppApiAccessByOkhttp api = context.getBean(AppApiAccessByOkhttp.class);
     api.setUsername(userName);
     api.setPassword(userPassword);
@@ -214,7 +221,7 @@ public class EdiArtifactProviderControllerTests {
 
   private List<ConsumedEdiArtifact> getConsumedEdiArtifactsFromServer() throws Exception {
     // GET ConsumedEdiArtifact from the server
-    String url = UriComponentsBuilder.fromUriString("http://localhost:8083/api/consumed-edi-artifacts/all").build().toString();
+    String url = UriComponentsBuilder.fromUriString(serverBaseUrl).path("api/consumed-edi-artifacts/all").build().toString();
     AppApiAccessByOkhttp api = context.getBean(AppApiAccessByOkhttp.class);
     api.setUsername(userName);
     api.setPassword(userPassword);
@@ -228,7 +235,7 @@ public class EdiArtifactProviderControllerTests {
 
   private List<ConsumedEdiArtifact> getConsumedEdiArtifactsByParticipantFromServer(String participantId) throws Exception {
     // GET ConsumedEdiArtifact from the server
-    String url = UriComponentsBuilder.fromUriString("http://localhost:8083/api/consumed-edi-artifacts/to-participant").pathSegment(participantId).build().toString();
+    String url = UriComponentsBuilder.fromUriString(serverBaseUrl).path("api/consumed-edi-artifacts/to-participant").pathSegment(participantId).build().toString();
     AppApiAccessByOkhttp api = context.getBean(AppApiAccessByOkhttp.class);
     api.setUsername(userName);
     api.setPassword(userPassword);
